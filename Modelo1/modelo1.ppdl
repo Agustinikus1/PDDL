@@ -1,0 +1,43 @@
+(define (domain logistica)
+  (:requirements :strips)
+  (:predicates
+    (en ?loc - ubicacion ?vehiculo - vehiculo)
+    (carga ?item - item)
+    (en ?item - item ?contenedor - contenedor)
+    (puede_transportar ?vehiculo - vehiculo ?item - item)
+    (aeropuerto ?loc - ubicacion)
+    (puerto ?loc - ubicacion)
+  )
+  
+  (:types
+    ubicacion vehiculo item contenedor - item
+  )
+  
+  (:operators
+    ; Cargar carga en un vehículo
+    (:action cargar
+      :parameters (?v - vehiculo ?i - item ?l - ubicacion)
+      :precondition (and (en ?l ?v) (en ?l ?i) (carga ?i) (puede_transportar ?v ?i))
+      :effect (and (not (en ?l ?i)) (en ?i ?v))
+    )
+
+    ; Descargar carga de un vehículo
+    (:action descargar
+      :parameters (?v - vehiculo ?i - item ?l - ubicacion)
+      :precondition (and (en ?l ?v) (en ?i ?v) (carga ?i))
+      :effect (and (not (en ?i ?v)) (en ?l ?i))
+    )
+
+    ; Viajar de una ubicación a otra
+    (:action viajar
+      :parameters (?v - vehiculo ?desde - ubicacion ?hacia - ubicacion)
+      :precondition (and (en ?desde ?v) (en ?hacia ?desde))
+      :effect (and (not (en ?desde ?v)) (en ?hacia ?v))
+    )
+  )
+)
+
+
+
+
+
